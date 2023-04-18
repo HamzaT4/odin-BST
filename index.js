@@ -42,7 +42,18 @@
         return tempArr;
     }
 }
-
+const prettyPrint = (node, prefix = '', isLeft = true) => {
+    if (node === null) {
+       return;
+    }
+    if (node.right !== null) {
+      prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
+    }
+    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+    if (node.left !== null) {
+      prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+    }
+  }
 const node = (value)=>{
     return{
         data:  null||value,
@@ -143,23 +154,13 @@ const tree = (array)=>{
                     parent.left=selectedNode.left;
                 }
                 else if(!leftChild&&rightChild){
-                
                     parent.left=selectedNode.right;
                 }
                 else if(leftChild&&rightChild){
-                    let replaceNode;
-                    if (selectedNode.right!=null) {
-                        replaceNode = findLeftestNode(selectedNode.right).data;
-                    }
-                    else{
-                        replaceNode= findLeftestNode(selectedNode.left).data;
-                    }
-                    
+                    let replaceNode = findLeftestNode(selectedNode.right).data;
                     this.delete(replaceNode);
                    selectedNode.data= replaceNode;
-                }
-              
-                
+                }              
               }
               else if(this.root.right!=null && value==this.root.right.data){
                 let parent=this.root;
@@ -174,13 +175,7 @@ const tree = (array)=>{
                 }else if(!leftChild&&rightChild){
                     parent.right=selectedNode.right;
                 }else if(leftChild&&rightChild){
-                    let replaceNode;
-                    if (selectedNode.right!=null) {
-                        replaceNode = findLeftestNode(selectedNode.right).data;
-                    }
-                    else{
-                        replaceNode= findLeftestNode(selectedNode.left).data;
-                    }
+                    let replaceNode = findLeftestNode(selectedNode.right).data;
                     this.delete(replaceNode);
                    selectedNode.data= replaceNode;
                 }
@@ -210,13 +205,9 @@ const tree = (array)=>{
             else if (value<this.root.data) {
                     let temRoot = this.root;
                     this.root=this.root.left;
-                    
                     this.delete(value); 
-                    this.root=temRoot;
-                
+                    this.root=temRoot; 
             }
-
-  
         },
         find: function(value){
         let foundNode='N/A';
@@ -252,7 +243,7 @@ const tree = (array)=>{
               if (typeof fun == 'function') {
                 fun(currentNode.data);
               }if (typeof fun != 'function') {
-                outputArray.push(currentNode);
+                outputArray.push(currentNode.data);
               }
               
 
@@ -283,8 +274,8 @@ const tree = (array)=>{
                 if (currentNode==null) {
                     return;
                 }
-                if(typeof fun =="function")fun(currentNode)
-                else {outputArray.push(currentNode);}
+                if(typeof fun =="function")fun(currentNode.data)
+                else {outputArray.push(currentNode.data);}
                 DFT(currentNode.left);
                 DFT(currentNode.right)
 
@@ -299,7 +290,7 @@ const tree = (array)=>{
                     return;
                 }
                 DFT(currentNode.left);
-                if(typeof fun =="function")fun(currentNode)
+                if(typeof fun =="function")fun(currentNode.data)
                 else {outputArray.push(currentNode.data);}
                 DFT(currentNode.right)
 
@@ -317,8 +308,8 @@ const tree = (array)=>{
                 
                 DFT(currentNode.left);
                 DFT(currentNode.right)
-                if(typeof fun =="function")fun(currentNode)
-                else {outputArray.push(currentNode);}
+                if(typeof fun =="function")fun(currentNode.data)
+                else {outputArray.push(currentNode.data);}
             };
             DFT(this.root);
             return outputArray;
@@ -373,32 +364,21 @@ const tree = (array)=>{
 
     }
 }
-let myTree = tree([10,20,30,40,50,60,70,80,5]);
-myTree.buildTree([10,20,30,40,50,60,70,80]);
-function printThem(e) {
-    console.log(e);
-}
-
-
-
-
-
-const prettyPrint = (node, prefix = '', isLeft = true) => {
-    if (node === null) {
-       return;
-    }
-    if (node.right !== null) {
-      prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
-    }
-    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
-    if (node.left !== null) {
-      prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
-    }
-  }
-
-myTree.insert(5);
+//Tests
+let myTree=tree([10,20,30,40,50,60,70]);
+myTree.buildTree([10,20,30,40,50,60,70]);
 prettyPrint(myTree.root);
-console.log(myTree.isBalanced()); 
+console.log(myTree.isBalanced());
+console.log(myTree.levelOrder());
+console.log(myTree.preOrder(),myTree.inOrder(),myTree.postOrder());
+myTree.insert(110);
+myTree.insert(120);
+myTree.insert(105);
+prettyPrint(myTree.root);
+console.log(myTree.isBalanced());
 myTree.reBalance();
-prettyPrint(myTree.root)
+prettyPrint(myTree.root);
+console.log(myTree.isBalanced());
+console.log(myTree.levelOrder());
+console.log(myTree.preOrder(),myTree.inOrder(),myTree.postOrder());
 
